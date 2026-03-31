@@ -1,8 +1,14 @@
 <?php
 
 // comment out the following two lines when deployed to production
-defined('YII_DEBUG') or define('YII_DEBUG', true);
+defined('YII_DEBUG') or define('YII_DEBUG', false);
+defined('TECHNICAL_WORKS') or define('TECHNICAL_WORKS', false);
 defined('YII_ENV') or define('YII_ENV', 'prod');//dev prod
+
+if (TECHNICAL_WORKS === true || TECHNICAL_WORKS == 1) {
+    require __DIR__ . '/maintenance.php';
+    exit;
+}
 
 
 

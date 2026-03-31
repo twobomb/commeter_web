@@ -32,6 +32,7 @@ if(!$isSearch)
 <html lang="<?= Yii::$app->language ?>" class="h-100">
 <head>
     <title><?= Html::encode($this->title) ?></title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <?php $this->head() ?>
 </head>
 <body class="d-flex flex-column h-100">
@@ -64,7 +65,8 @@ if(!$isSearch)
                     ['label' => 'Список перемещений', 'url' => '/item/transfer-list'],
                     ['label' => 'Список обслуживаний', 'url' => '/item/repair-list'],
                     ['label' => 'Массовое перемещение', 'url' => '/item/massive-transfer'],
-                    ['label' => 'Замена категории средств', 'url' => '/item/massive-change-category']
+                    ['label' => 'Замена категории средств', 'url' => '/item/massive-change-category'],
+                    ['label' => 'Смена пароля', 'url' => '/site/change-password'],
                 ],
             ]);
     if($isAdmin)
@@ -73,6 +75,7 @@ if(!$isSearch)
                 'label' => 'Администрирование',
                 'items' => [
                     ['label' => 'Пользователи', 'url' => '/admin/users-list'],
+                    ['label' => 'Дашборд подразделений', 'url' => '/admin/departments-dashboard'],
                     ['label' => 'Категории', 'url' => '/category'],
                     ['label' => 'Подразделения', 'url' => '/department'],
                     ['label' => 'Свойства', 'url' => '/feature'],
@@ -94,9 +97,14 @@ if(!$isSearch)
             )
             . Html::endForm()
             . '</li>');
+
+
+    array_push($items,
+        ['label' => Html::tag("i","",["class"=>"fa fa-question-circle"]),'url' => ['/site/help'],'options' => ['class'=>'help-btn']]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
-        'items' => $items
+        'items' => $items,
+        'encodeLabels' => false
     ]);
     NavBar::end();
     ?>

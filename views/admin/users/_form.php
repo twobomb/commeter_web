@@ -22,7 +22,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'role')->dropDownList([\app\models\DataExt::getRolesInp()]) ?>
 
     <?= $form->field($model, 'departmentsAccess')->widget(Select2::classname(), [
-        'data' => \app\models\Department::getListDepartments(),
+        'data' =>  \app\models\Department::getListDepartments(),
         'value'=>$model->departmentsAccess,
         'options' => ['placeholder' => 'Выберите подразделение ...','multiple' => true],
         'pluginOptions' => [

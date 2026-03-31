@@ -2,7 +2,7 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=commeter_web',
+    'dsn' => 'mysql:host=10.113.0.121;dbname=commeter_web',
     'username' => 'root',
     'password' => 'lbgfgths',
     'charset' => 'utf8',

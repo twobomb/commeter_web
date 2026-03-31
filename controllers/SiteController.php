@@ -55,6 +55,40 @@ class SiteController extends AppController
             ]
         );
     }
+    public function actionHelp(){
+
+        $filePath = Yii::$app->basePath.'/web/help.docx';
+        $fileName = 'Руководство пользователя.docx';
+        return Yii::$app->response->sendFile($filePath, $fileName);
+    }
+    public function actionChangePassword(){
+        $model = \app\models\User::findOne(Yii::$app->user->getId());
+        if (!$model) {
+            Yii::$app->session->setFlash('error', 'Пользователь не найден.');
+            return $this->redirect('/'); // или любой другой редирект
+        }
+
+        // Устанавливаем сценарий
+        $model->scenario = 'changePassword';
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->validate()) {
+                // Хешируем и сохраняем новый пароль
+                $model->pwd_hash = Yii::$app->security->generatePasswordHash($model->new_password);
+                // Сохраняем без повторной валидации (она уже была)
+                if ($model->save(false)) {
+                    showMessage( "Пароль для пользователя {$model->name} успешно изменён.");
+                    return $this->redirect('/'); // или любой другой редирект
+                } else {
+                    showError( 'Ошибка при сохранении пароля.');
+                }
+            }
+        }
+
+        return $this->render('change-password', [
+            'model' => $model,
+        ]);
+    }
 	public function actionExcelPrepare(){
         if(!User::isAdmin())
             throw new ForbiddenHttpException("Запрещено");

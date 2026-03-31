@@ -15,7 +15,12 @@
     align-self: center;
 }
 
-
+.help-btn{
+    position: absolute;
+    right: 10px;
+    font-size: 20px;
+    top: 0px;
+}
 #dlgRepair .modal-content,
 #dlgRepair .modal-content .bootstrap-dialog-body,
 #dlgRepair .modal-content .bootstrap-dialog-message,

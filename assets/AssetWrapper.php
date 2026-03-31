@@ -8,8 +8,8 @@ use yii\web\AssetBundle;
 class AssetWrapper extends AssetBundle
 {
     //Версия кеша, если меняем файлы ассетов, то делаем +1
-    const CACHE_VERSION_CSS = 23;
-    const CACHE_VERSION_JS = 23;
+    const CACHE_VERSION_CSS = 24;
+    const CACHE_VERSION_JS = 24;
 
     public static function getVersionJs(){
         if(YII_ENV == "dev")

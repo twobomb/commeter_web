@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\db\Exception;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\ForbiddenHttpException;
 
@@ -139,6 +140,7 @@ class Item extends \yii\db\ActiveRecord{
     {
         return $this->hasOne(Department::class, ['id' => 'department_id']);
     }
+
 
     /**
      * Gets query for [[Employee]].

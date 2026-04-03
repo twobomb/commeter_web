@@ -48,6 +48,7 @@ $fields = [
   "responsible_employee_id"=>"Мат.отвественный",
   "category_id"=>"Категория",
   "department_id"=>"Подразделение",
+  "stateTech"=>"Текущее состояние",
 ];
 $defaults = ["name","inv_num","workspace",'responsible_employee_id','category_id','department_id'];
 $activeFiedls = $defaults;
@@ -137,8 +138,13 @@ $employees = ArrayHelper::map((\app\models\Employee::find()->where(["in","depart
 ?>
 
 <div class="item-search">
+<?PHP
+$techStateFeatId = -1;
+if(\app\models\Feature::find()->where(["name"=>"Текущее состояние"])->one() != null)
+    $techStateFeatId = \app\models\Feature::find()->where(["name"=>"Текущее состояние"])->one()->id;
 
-
+$stateTechList = ArrayHelper::map(\app\models\DictinaryItem::find()->where(["dictinary_id"=>\app\models\Dictinary::find()->where(["name"=>"Текущее состояние"])->one()->id])->all(), 'id', 'value');
+?>
             <?= GridView::widget([
 
                 'panel' => [
@@ -303,6 +309,25 @@ EOF;
                         "hidden"=>!in_array('searchTags',$activeFiedls),
                         "filterOptions"=>["id"=>"fieldSearchTags"]
                     ],
+                        [
+                                'attribute' => 'stateTech',
+                                'label'=>"Текущее состояние",
+                                'filter' =>  $stateTechList,
+                                'filterType' => GridView::FILTER_SELECT2,
+                                'filterWidgetOptions' => [
+                                        'options' => ['prompt' => ''],
+                                        'pluginOptions' => ['allowClear' => true],
+                                ],
+                                "value"=>function($v) use ($techStateFeatId,$stateTechList) {
+                                    $arr =  ArrayHelper::map($v->featureValues,"feature_id","value");
+
+                                    if(isset($arr[$techStateFeatId]))
+                                        return $stateTechList[$arr[$techStateFeatId]];
+                                    return "";
+                                },
+                                "hidden"=>!in_array('stateTech',$activeFiedls),
+
+                        ],
 
                 ],
             ]); ?>

@@ -14,6 +14,7 @@ use yii\helpers\ArrayHelper;
 class ItemSearch extends Item{
     public $searchTags = null;
     public $typeShow = null;
+    public $stateTech = null;
     public $showWithDeps = null;
 
     /**
@@ -22,7 +23,7 @@ class ItemSearch extends Item{
     public function rules()
     {
         return [
-            [['id', 'inv_num', 'workspace', 'name', 'date_change','searchTags','responsible_employee_id','typeShow','showWithDeps'], 'safe'],
+            [['id', 'inv_num', 'workspace', 'name', 'date_change','searchTags','responsible_employee_id','typeShow','showWithDeps','stateTech'], 'safe'],
             [['employee_id', 'category_id', 'is_written_off', 'department_id'], 'integer'],
         ];
     }
@@ -62,7 +63,6 @@ class ItemSearch extends Item{
         ]);
 
         $this->load($params);
-
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -157,6 +157,14 @@ class ItemSearch extends Item{
                 return $query
                     ->andWhere(["in","tags.id",$this->searchTags]);
             }])->all(),"id");
+            $query->andWhere(["in",'id',$ids]);
+        }
+
+
+        if($this->stateTech != null){
+
+            $techStateFeatId = \app\models\Feature::find()->where(["name"=>"Текущее состояние"])->one()->id;
+            $ids = ArrayHelper::getColumn(FeatureValue::find()->where(["feature_id"=>$techStateFeatId,"value"=>$this->stateTech])->all(),"item_id");
             $query->andWhere(["in",'id',$ids]);
         }
 

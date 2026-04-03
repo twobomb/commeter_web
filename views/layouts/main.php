@@ -84,6 +84,13 @@ if(!$isSearch)
                     ['label' => 'Добавление из файла', 'url' => '/site/excel-prepare'],
                 ],
             ]);
+        array_push($items,
+            [
+                'label' => 'Отчеты',
+                'items' => [
+                    ['label' => 'Количественный отчет', 'url' => '/report/quantitative-report'],
+                ],
+            ]);
 
     }
     array_push($items,

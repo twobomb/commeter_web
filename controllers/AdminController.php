@@ -3,6 +3,9 @@
 namespace app\controllers;
 
 use app\models\History;
+use app\models\Category;
+use app\models\Department;
+use app\models\Item;
 use app\models\search\UserSearch;
 use app\models\Statuses;
 use app\models\User;
@@ -11,9 +14,12 @@ use yii\base\BaseObject;
 use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
+use yii\web\Response;
 use yii\web\NotFoundHttpException;
 
 class AdminController extends AppController{
+
 
     public function actionDepartmentsDashboard()
     {

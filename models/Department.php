@@ -52,8 +52,17 @@ class Department extends \yii\db\ActiveRecord
     }
     public function getResponsibles(){
         $all = $this->getIdsAllUnitDepartmentsWithUnit();
-        return Employee::find()->where(["is_responsible"=>true])->andFilterWhere(["in","department_id",$all])->all();
 
+        $res = Employee::find()->where(["is_responsible"=>true])->andFilterWhere(["in","department_id",$all])->all();
+
+        //Дополнительные мат.ответственные из других подразделений
+        $employeeIds = Yii::$app->db->createCommand("SELECT employee_id FROM advanced_departments WHERE department_id = $this->id")->queryColumn();
+        $res = array_merge($res,
+            Employee::find()->where(["is_responsible"=>true,"id"=>$employeeIds])->all());
+
+        $res = array_values(array_column($res, null, 'id'));
+
+        return $res;
     }
     public function getUnit(){
         if($this->is_department)

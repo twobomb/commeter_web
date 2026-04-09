@@ -30,10 +30,13 @@ if(\app\models\User::isAdmin())
     $resps = \app\models\Employee::find()->where(["is_responsible"=>true])->all();
 else {
     $deps = \Yii::$app->user->identity->getAccessDepartments(false);
-    foreach ($deps as $d)
-        array_push($resps,$d->unit->responsibles);
+    foreach ($deps as $d) {
+        $resps = array_merge($resps, $d->unit->responsibles);
+    }
 }
 $resps = ArrayHelper::map($resps,"id","fullName");
+
+
 
 $tagsAll = \yii\helpers\ArrayHelper::map(Yii::$app->user->identity->tags,"id","name");
 

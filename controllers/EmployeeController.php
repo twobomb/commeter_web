@@ -117,11 +117,20 @@ class EmployeeController extends AppController
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
-    {
+    public function actionView($id){
 		
 		$model = $this->findModel($id);
-		if(!in_array($model->department_id,ArrayHelper::getColumn(\Yii::$app->user->identity->getAccessDepartments(false), 'id')))
+        $canAccess = true;
+        if(!in_array($model->department_id,ArrayHelper::getColumn(\Yii::$app->user->identity->getAccessDepartments(false), 'id')))
+            $canAccess = false;
+
+        foreach (ArrayHelper::getColumn($model->advancedDepartments,"id") as $dep_id){
+            if(in_array($dep_id,ArrayHelper::getColumn(\Yii::$app->user->identity->getAccessDepartments(false), 'id'))) {
+                $canAccess = true;
+                break;
+            }
+        }
+        if(!$canAccess)
 			throw new ForbiddenHttpException("У вас нет доступа к департаменту сотрудника!");
 		
 		
@@ -141,6 +150,7 @@ class EmployeeController extends AppController
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -159,8 +169,8 @@ class EmployeeController extends AppController
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id){
+
         $model = $this->findModel($id);
 		
 		if(!in_array($model->department_id,ArrayHelper::getColumn(\Yii::$app->user->identity->getAccessDepartments(false), 'id')))
@@ -180,6 +190,8 @@ class EmployeeController extends AppController
     }
     public function actionReplaceResponsible($id){
         $model = $this->findModel($id);
+        if(!in_array($model->department_id,ArrayHelper::getColumn(\Yii::$app->user->identity->getAccessDepartments(false), 'id')))
+            throw new ForbiddenHttpException("У вас нет доступа к департаменту сотрудника!");
         if(\Yii::$app->request->isPost){
             $m1 = Employee::findOne(["id"=>$_POST["old_resp_id"]]);
             $m2 = Employee::findOne(["id"=>$_POST["new_resp_id"]]);

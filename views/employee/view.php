@@ -26,9 +26,8 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
+    <?PHP
+    $attrs = [
             'id',
             'first_name:ntext',
             'second_name:ntext',
@@ -37,18 +36,35 @@ $this->params['breadcrumbs'][] = $this->title;
             'cabinet:ntext',
             [
                     'attribute'=>'department_id',
-                'value'=>function($m){
-                    return $m->department->name;
-                }
+                    'value'=>function($m){
+                        return $m->department->name;
+                    }
             ],
             [
                     'attribute'=>'is_responsible',
-                'value'=>function($m){
-                    return $m->is_responsible ==  1?"ДА":"Нет";
-                }
+                    'value'=>function($m){
+                        return $m->is_responsible ==  1?"ДА":"Нет";
+                    }
             ]
-        ],
-    ])
+    ];
+
+    if($model->is_responsible)
+        array_push($attrs,
+                [
+                        'attribute'=>'advancedDepartments',
+                        'label'=>'Дополнительные подразделения у которых есть возможность выбора мат.ответственного',
+                        'value'=>function($m){
+                            return implode(",",\yii\helpers\ArrayHelper::getColumn($m->advancedDepartments,"name"));
+                        }
+                ]);
+
+    echo  DetailView::widget([
+        'model' => $model,
+        'attributes' => $attrs,
+    ]);
+
+
+
     ?>
 
     <?PHP
